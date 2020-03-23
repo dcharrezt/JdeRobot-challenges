@@ -6,27 +6,27 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <map>
 
 typedef std::vector<std::vector<char>> environment;
+typedef std::map<std::pair<int,int>, bool> visited;
+typedef std::vector<std::vector<std::pair<int,int>>> paths;
 
 class Labyrinth
 {
 
 public:
     Labyrinth();
-    int getLabyrinthWidth();
-    int getLabyrinthHeight();
     
-    void readSchema();
+    void startLabyrinth();
+    void printEnvironement();
+    void solveLabyrinth();
 
 private:
     int labyrinthWidth;
     int labyrinthHeight;
     std::string fileName;
     environment env;
-
-
-
 
 };
 

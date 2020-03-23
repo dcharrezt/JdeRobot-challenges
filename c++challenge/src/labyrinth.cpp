@@ -1,29 +1,16 @@
 #include "../include/labyrinth.h"
 
-#include <unistd.h>
-#define GetCurrentDir getcwd
-
 Labyrinth::Labyrinth()
 {
-    this->labyrinthWidth = 6;
+    this->labyrinthWidth = 7;
     this->labyrinthHeight = 5;
 }
 
-int Labyrinth::getLabyrinthWidth()
-{
-    return this->labyrinthWidth;
-}
-
-int Labyrinth::getLabyrinthHeight()
-{
-    return this->labyrinthHeight;
-}
-
-void Labyrinth::readSchema()
+void Labyrinth::startLabyrinth()
 {
     while(true) {
         std::string response;
-        std::cout << "Enter the labyrinth schema file name or write (quit) to cancel:" << std::endl;
+        std::cout << "Enter the labyrinth file name or write (quit) to cancel:" << std::endl;
         std::cin >> response;
         if (response == "quit") {
             break;
@@ -47,13 +34,37 @@ void Labyrinth::readSchema()
             }
 
             std::cout << "Input: " << std::endl;
-            for (auto row : this->env) {
-                for (auto i : row) {
-                    std::cout << i;
-                }
-                std::cout << "\n";
-            }
+            printEnvironement();
+            solveLabyrinth();
         }
     }
+}
 
+void Labyrinth::printEnvironement() {
+    for (auto row : this->env) {
+        for (auto i : row) {
+            std::cout << i;
+        }
+        std::cout << "\n";
+    }
+}
+
+void Labyrinth::solveLabyrinth() {
+
+    // for (int i = 0; i < this->labyrinthHeight; i++) {
+    //     for (int j = 0; j < this->labyrinthWidth; j++) {
+    //         if(this->env[i][j] == '.' ) {
+    //             std::cout << i<< ' ' << j;
+    //         }
+    //     }
+    //     std::cout << "\n";
+    // }
+
+    std::cout << "Output:" << std::endl;
+    for (int i = 0; i < this->labyrinthHeight; i++) {
+        for (int j = 0; j < this->labyrinthWidth; j++) {
+            std::cout << this->env[i][j];
+        }
+        std::cout << "\n";
+    }
 }

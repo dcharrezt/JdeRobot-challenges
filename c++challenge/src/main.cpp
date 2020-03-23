@@ -7,7 +7,7 @@ int main (int argc, char *argv[]) {
 
     Labyrinth labyrinth;
 
-	labyrinth.readSchema();
+	labyrinth.startLabyrinth();
 
 	return 0;
 }
