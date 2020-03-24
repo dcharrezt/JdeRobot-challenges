@@ -9,8 +9,9 @@
 #include <map>
 
 typedef std::vector<std::vector<char>> environment;
-typedef std::map<std::pair<int,int>, bool> visited;
-typedef std::vector<std::vector<std::pair<int,int>>> paths;
+typedef std::map<std::pair<int,int>, bool> visitedPositions;
+typedef std::vector<std::vector<std::pair<int,int>>> allPaths;
+typedef std::vector<std::pair<int,int>> longestPath;
 
 class Labyrinth
 {
@@ -26,7 +27,12 @@ private:
     int labyrinthWidth;
     int labyrinthHeight;
     std::string fileName;
+
     environment env;
+    visitedPositions visited;
+    allPaths paths;
+    int longestPathSize;
+    longestPath pathway;
 
 };
 
