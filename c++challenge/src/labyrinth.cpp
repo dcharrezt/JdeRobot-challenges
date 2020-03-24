@@ -26,7 +26,6 @@ void Labyrinth::startLabyrinth()
 
             if(!file) {
                 std::cerr << "The file cannot be found.\n";
-                return;
             } else {
                 while (std::getline(file, tempstr)) {
                     std::vector<char> temp;
@@ -35,11 +34,12 @@ void Labyrinth::startLabyrinth()
                     }
                     this->env.push_back(temp);
                 }
+                std::cout << "Input: " << std::endl;
+                printEnvironement();
+                solveLabyrinth();
             }
 
-            std::cout << "Input: " << std::endl;
-            printEnvironement();
-            solveLabyrinth();
+
         }
     }
 }
@@ -94,7 +94,7 @@ void Labyrinth::solveLabyrinth() {
         }
     }
 
-    std::cout << "Output: " << this->longestPathSize << std::endl;
+    std::cout << "Output: path size is " << this->longestPathSize << std::endl;
      for (int i = 0; i < this->longestPathSize; i++) {
             this->env[this->pathway[i].first][this->pathway[i].second] = '0' + i;
     }
