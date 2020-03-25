@@ -36,16 +36,15 @@ class TestGameOfLife(unittest.TestCase):
         for i in range(3):
             for j in range(3):
                 self.game.board[i][j] = self.game.patterns["Blinker"][i][j]
-        print(self.game.board[:3][:3])
         self.game.update_game()
-        print(self.game.board[:3][:3])
-        self.assertEqual(self.game.board[]
+        self.assertEqual(self.game.board[0][1], 1)
+        self.assertEqual(self.game.board[1][1], 1)
+        self.assertEqual(self.game.board[2][1], 1)
             
     def test_key_pressed(self):
         self.assertEqual(self.game.patterns[self.game.menu[ord('9')]], [[1, 1, 1], [1, 0, 1], 
                             [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 0, 1], [1, 1, 1]])
-        
-
+    
 
 if __name__ == '__main__':
     unittest.main()

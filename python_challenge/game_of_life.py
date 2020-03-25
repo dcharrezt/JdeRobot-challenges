@@ -1,9 +1,10 @@
 import numpy as np
-import json
-import curses
-from collections import OrderedDict 
-from curses import textpad
-import time
+import json # python standard library 
+import curses # python standard library 
+import time # python standard library 
+from collections import OrderedDict # python standard library  
+from curses import textpad # python standard library 
+
 
 class GameOfLife(object):
     """
@@ -18,10 +19,14 @@ class GameOfLife(object):
             Width of the board, 50 by default.
         height : int
             Height of the board, 50 by default.
-        patterns : json, optional
-            A json of 2d arrays to certain patterns.
+        patterns : json
+            A json of 2d arrays of initialize the game of life.
+        menu : OrderecdDict
+            An ordered dict mapping keys and id of the pattern
+        board : 2d array
+            numpy matrix that represents the board, initialized with zeros
         """
-
+        
         with open('config.json') as config_file:
             data = json.load(config_file)
 
@@ -32,10 +37,24 @@ class GameOfLife(object):
                         (ord('3'), 'Boat'), (ord('4'), 'Tub'),(ord('5'), 'Blinker'), 
                         (ord('6'), 'Toad'), (ord('7'), 'Beacon'), (ord('8'), 'Pulsar'),
                         (ord('9'), 'Pentadecathlon'), (ord('a'), 'Glider'), (ord('b'), 'LWSpaceship'), 
-                        (ord('c'), 'MWSpaceship'), (ord('d'), 'HWSpaceship')])
+                        (ord('c'), 'MWSpaceship'), (ord('d'), 'HWSpaceship'), (ord('e'), 'Random')])
         self.board = np.zeros((self.height, self.width))
 
     def get_neighbours(self, x, y):
+        """
+        Given a cell position returns a lists of the cell's neighbours positions
+
+        Parameters
+        ----------
+        x : int
+            X coordinate of the cell that which neighbours are going to be retrieved
+        y : int
+            Y coordinate of the cell that which neighbours are going to be retrieved
+        Returns
+        ----------
+        neighbours: list[]
+            Returns the x and y coordinates of the neighbours from the queried positions
+        """
         neighbours = []
         for x2 in range(x-1, x+2):
             for y2 in range(y-1, y+2):
@@ -46,6 +65,14 @@ class GameOfLife(object):
         return  neighbours
 
     def update_game(self):
+        """
+        Updates cells to comply the game of life's rules
+
+        Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+        Any live cell with two or three live neighbours lives on to the next generation.
+        Any live cell with more than three live neighbours dies, as if by overpopulation.
+        Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+        """
         changes = [] 
         for i in range(self.width):
             for j in range(self.height):
@@ -66,9 +93,20 @@ class GameOfLife(object):
 
 
     def start_game(self):
+        """
+        Initializes the game environment
+        """
         curses.wrapper(self.menu_controller)    
 
     def print_menu(self, stdscr):
+        """
+        Renders the left menu in the stdscr window
+
+         Parameters
+        ----------
+        stdscr : Window
+            Window object representing the entire screen
+        """
         stdscr.addstr(1, 3, "To choose an")
         stdscr.addstr(2, 3, "option press")
         stdscr.addstr(3, 3, "its key or")
@@ -80,8 +118,21 @@ class GameOfLife(object):
                 stdscr.addstr(x, y, chr(idx+87)+'. '+self.menu[item])
             else:
                 stdscr.addstr(x, y, str(idx)+'. '+self.menu[item])
+        stdscr.addstr(23, 3, "And press ENTER")
+        stdscr.addstr(24, 3, "to show the")
+        stdscr.addstr(25, 3, "next step!")
+        
 
     def draw_pattern(self, stdscr):
+        """
+        Renders the self.board where 0s are updated as empty spaces and
+        1s are updated as * in the stdscr window
+
+        Parameters
+        ----------
+        stdscr : Window
+            Window object representing the entire screen
+        """
         for x in range(self.width):
             for y in range(self.height):
                 if self.board[y][x] == 1:
@@ -90,6 +141,16 @@ class GameOfLife(object):
                     stdscr.addstr(y+2, x+21, ' ')         
 
     def menu_controller(self, stdscr):
+        """
+        Handles the key up events and calls two helper functions draw_patters and print_menu
+        to render into the stdscr window
+
+        Parameters
+        ----------
+        stdscr : Window
+            Window object representing the entire screen
+        """
+
         curses.curs_set(0)
         stdscr.nodelay(1)
         stdscr.timeout(100)
@@ -105,12 +166,16 @@ class GameOfLife(object):
             key = stdscr.getch()
             if key in self.menu:
                 self.board = np.zeros((self.height, self.width))
-                for i in range(len(self.patterns[self.menu[key]])):
-                    for j in range(len(self.patterns[self.menu[key]][0])):
-                        self.board[i+10][j+10] = self.patterns[self.menu[key]][i][j]
-            elif key == curses.KEY_ENTER or key == 10 or key == 13:
+                if key == ord('e') or key == ord('E'):
+                    self.board = np.random.randint(2, size=(self.height, self.width))
+                else:
+                    for i in range(len(self.patterns[self.menu[key]])):
+                        for j in range(len(self.patterns[self.menu[key]][0])):
+                            self.board[i+10][j+10] = self.patterns[self.menu[key]][i][j]
                 self.draw_pattern(stdscr)
+            elif key == curses.KEY_ENTER or key == 10 or key == 13:
                 self.update_game()
+                self.draw_pattern(stdscr)
                     
             elif key == ord('q') or key==ord('Q'):
                 break
