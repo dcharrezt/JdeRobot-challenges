@@ -1,8 +1,6 @@
 {
-    "width": 90,
-    "height": 45,
-    "seed": 3,
-    "speed": 0.5,
+    "width": 40,
+    "height": 30,
     "patterns": {
             "Block": [[1, 1], 
                      [1, 1]],

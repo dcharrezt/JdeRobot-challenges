@@ -1,7 +1,6 @@
 import numpy as np
 import json # python standard library 
 import curses # python standard library 
-import time # python standard library 
 from collections import OrderedDict # python standard library  
 from curses import textpad # python standard library 
 
@@ -171,7 +170,7 @@ class GameOfLife(object):
                 else:
                     for i in range(len(self.patterns[self.menu[key]])):
                         for j in range(len(self.patterns[self.menu[key]][0])):
-                            self.board[i+10][j+10] = self.patterns[self.menu[key]][i][j]
+                            self.board[i+3][j+3] = self.patterns[self.menu[key]][i][j]
                 self.draw_pattern(stdscr)
             elif key == curses.KEY_ENTER or key == 10 or key == 13:
                 self.update_game()
